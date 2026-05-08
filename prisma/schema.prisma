@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Lancamento {
+  id        Int      @id @default(autoincrement())
+  tipo      String   // "despesa" or "receita"
+  descricao String
+  categoria String   @default("Outros")
+  valor     Float
+  parcelas  Int      @default(1)
+  data      String   // DD/MM/YYYY format
+  status    String   @default("Pendente") // Pendente, Pago, Recebido, Cancelado
+  mes       Int      // 1-12
+  ano       Int      // 2026
+  origem    String   @default("Manual") // Manual, WhatsApp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SalarioConfig {
+  id        Int    @id @default(autoincrement())
+  tipo      String // dia5, dia20, diautil
+  mes       Int    // 1-12
+  valor     Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([tipo, mes])
+}
